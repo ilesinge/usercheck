@@ -1,6 +1,9 @@
 package twitter_test
 
 import (
+	"errors"
+	"io/ioutil"
+	"net/http"
 	"testing"
 
 	"github.com/ilesinge/usercheck/twitter"
@@ -67,6 +70,62 @@ func TestUsernameIsValidWithUnderscore(t *testing.T) {
 	output := twitter.Validate("ile_singe")
 	if !output {
 		t.Errorf("Valid username not accepted")
+	}
+}
+
+type YesHttpClient struct{}
+
+func (h *YesHttpClient) Do(req *http.Request) (*http.Response, error) {
+	res := &http.Response{StatusCode: http.StatusOK, Body: ioutil.NopCloser(nil)}
+	return res, nil
+}
+
+func TestIsUnavailableWithPageFound(t *testing.T) {
+	var twitter twitter.Twitter
+	var yesClient *YesHttpClient = &YesHttpClient{}
+	res, err := twitter.IsAvailable("yes", yesClient)
+	if err != nil {
+		t.Errorf("Twitter.IsAvailable returned an error %v", err)
+	}
+	if res == true {
+		t.Errorf("Twitter handle should be unavailable")
+	}
+}
+
+type NoHttpClient struct{}
+
+func (h *NoHttpClient) Do(req *http.Request) (*http.Response, error) {
+	res := &http.Response{StatusCode: http.StatusNotFound, Body: ioutil.NopCloser(nil)}
+	return res, nil
+}
+
+func TestIsAvailableWithPageNotFound(t *testing.T) {
+	var twitter twitter.Twitter
+	var noClient *NoHttpClient = &NoHttpClient{}
+	res, err := twitter.IsAvailable("yes", noClient)
+	if err != nil {
+		t.Errorf("Twitter.IsAvailable returned an error %v", err)
+	}
+	if res != true {
+		t.Errorf("Twitter handle should be available")
+	}
+}
+
+type ErrorHttpClient struct{}
+
+func (h *ErrorHttpClient) Do(req *http.Request) (*http.Response, error) {
+	return nil, errors.New("wtf")
+}
+
+func TestIsUnavailableWithError(t *testing.T) {
+	var twitter twitter.Twitter
+	var errorClient *ErrorHttpClient = &ErrorHttpClient{}
+	res, err := twitter.IsAvailable("yes", errorClient)
+	if err == nil {
+		t.Errorf("Twitter.IsAvailable should return an error")
+	}
+	if res != false {
+		t.Errorf("Twitter handle should be unavailable")
 	}
 }
 
