@@ -1,6 +1,10 @@
 package github
 
-import "github.com/ilesinge/usercheck/rules"
+import (
+	"net/http"
+
+	"github.com/ilesinge/usercheck/rules"
+)
 
 // Github type
 type Github struct{}
@@ -8,6 +12,17 @@ type Github struct{}
 // Validate check if is github valid
 func (g *Github) Validate(username string) bool {
 	return rules.ValidateRules(getRules(), username)
+}
+
+// IsAvailable checks if the username is available on Github
+func (g *Github) IsAvailable(username string) (available bool, err error) {
+	res, err := http.Get("https://github.com/" + username)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	available = (res.StatusCode == http.StatusNotFound)
+	return
 }
 
 func getRules() []func(string) bool {

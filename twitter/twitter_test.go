@@ -10,7 +10,7 @@ func TestUsernameTooLong(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("0123456789012345")
 	if output {
-		t.Fatalf("Too long username accepted")
+		t.Errorf("Too long username accepted")
 	}
 }
 
@@ -18,7 +18,7 @@ func TestUsernameShortEnough(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("012345678901234")
 	if !output {
-		t.Fatalf("Valid username refused")
+		t.Errorf("Valid username refused")
 	}
 }
 
@@ -26,7 +26,7 @@ func TestUsernameTooShort(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("")
 	if output {
-		t.Fatalf("Too short username accepted")
+		t.Errorf("Too short username accepted")
 	}
 }
 
@@ -34,7 +34,7 @@ func TestUsernameLongEnough(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("o")
 	if !output {
-		t.Fatalf("Valid username refused")
+		t.Errorf("Valid username refused")
 	}
 }
 
@@ -42,7 +42,7 @@ func TestUsernameContainsUppercaseTwitter(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("TWITTERuser")
 	if output {
-		t.Fatalf("username containing uppercase twitter accepted")
+		t.Errorf("username containing uppercase twitter accepted")
 	}
 }
 
@@ -50,7 +50,7 @@ func TestUsernameContainsLowercaseTwitter(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("twitterUser")
 	if output {
-		t.Fatalf("username containing lowercase twitter accepted")
+		t.Errorf("username containing lowercase twitter accepted")
 	}
 }
 
@@ -58,7 +58,7 @@ func TestUsernameContainsSpecialchar(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("us*er")
 	if output {
-		t.Fatalf("username containing special char accepted")
+		t.Errorf("username containing special char accepted")
 	}
 }
 
@@ -66,7 +66,7 @@ func TestUsernameIsValidWithUnderscore(t *testing.T) {
 	var twitter twitter.Twitter
 	output := twitter.Validate("ile_singe")
 	if !output {
-		t.Fatalf("Valid username not accepted")
+		t.Errorf("Valid username not accepted")
 	}
 }
 
@@ -89,7 +89,7 @@ func TestIsLongEnough(t *testing.T) {
 		t.Logf("Running test case %s", testName)
 		output := isLongEnough(test.input)
 		if test.output != output {
-			t.Fatalf("expected output to be %v, but got %v", test.output, output)
+			t.Errorf("expected output to be %v, but got %v", test.output, output)
 		}
 	}
 }
@@ -112,7 +112,7 @@ func TestIsShortEnough(t *testing.T) {
 		t.Logf("Running test case %s", testName)
 		output := isShortEnough(test.input)
 		if test.output != output {
-			t.Fatalf("expected output to be %v, but got %v", test.output, output)
+			t.Errorf("expected output to be %v, but got %v", test.output, output)
 		}
 	}
 }
@@ -139,7 +139,7 @@ func TestDoesNotContainTwitter(t *testing.T) {
 		t.Logf("Running test case %s", testName)
 		output := doesNotContainTwitter(test.input)
 		if test.output != output {
-			t.Fatalf("expected output to be %v, but got %v", test.output, output)
+			t.Errorf("expected output to be %v, but got %v", test.output, output)
 		}
 	}
 }

@@ -30,6 +30,7 @@ func DoesNotContainSubstring(s string) func(string) bool {
 }
 
 // ContainsValidCharacters creates pattern checker
+// Note that an invalid regexp pattern will result in a panic
 func ContainsValidCharacters(pattern string) func(string) bool {
 	var usernameMask = regexp.MustCompile(pattern)
 	return func(username string) bool {

@@ -1,6 +1,8 @@
 package twitter
 
 import (
+	"net/http"
+
 	"github.com/ilesinge/usercheck/rules"
 )
 
@@ -10,6 +12,17 @@ type Twitter struct{}
 // Validate check if is twitter valid
 func (t *Twitter) Validate(username string) bool {
 	return rules.ValidateRules(getRules(), username)
+}
+
+// IsAvailable checks if the username is available on Twitter
+func (t *Twitter) IsAvailable(username string) (available bool, err error) {
+	res, err := http.Get("https://twitter.com/" + username)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	available = (res.StatusCode == http.StatusNotFound)
+	return
 }
 
 func getRules() []func(string) bool {
