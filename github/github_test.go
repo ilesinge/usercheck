@@ -7,6 +7,7 @@ import (
 )
 
 func TestUsernameTooLong(t *testing.T) {
+	var github github.Github
 	output := github.Validate("0123456789012345678901234567890123456789")
 	if output {
 		t.Fatalf("Too long username accepted")
@@ -14,6 +15,7 @@ func TestUsernameTooLong(t *testing.T) {
 }
 
 func TestUsernameShortEnough(t *testing.T) {
+	var github github.Github
 	output := github.Validate("012345678901234567890123456789012345678")
 	if !output {
 		t.Fatalf("Valid username refused")
@@ -21,6 +23,7 @@ func TestUsernameShortEnough(t *testing.T) {
 }
 
 func TestUsernameTooShort(t *testing.T) {
+	var github github.Github
 	output := github.Validate("")
 	if output {
 		t.Fatalf("Too short username accepted")
@@ -28,6 +31,7 @@ func TestUsernameTooShort(t *testing.T) {
 }
 
 func TestUsernameLongEnough(t *testing.T) {
+	var github github.Github
 	output := github.Validate("o")
 	if !output {
 		t.Fatalf("Valid username refused")
@@ -35,6 +39,7 @@ func TestUsernameLongEnough(t *testing.T) {
 }
 
 func TestUsernameContainsDoubleDash(t *testing.T) {
+	var github github.Github
 	output := github.Validate("user--user")
 	if output {
 		t.Fatalf("username containing double dash accepted")
@@ -42,6 +47,7 @@ func TestUsernameContainsDoubleDash(t *testing.T) {
 }
 
 func TestUsernameContainsDashAtBeginning(t *testing.T) {
+	var github github.Github
 	output := github.Validate("-user")
 	if output {
 		t.Fatalf("username beginning with dash accepted")
@@ -49,6 +55,7 @@ func TestUsernameContainsDashAtBeginning(t *testing.T) {
 }
 
 func TestUsernameContainsDashAtEnd(t *testing.T) {
+	var github github.Github
 	output := github.Validate("user-")
 	if output {
 		t.Fatalf("username ending with dash accepted")
@@ -56,6 +63,7 @@ func TestUsernameContainsDashAtEnd(t *testing.T) {
 }
 
 func TestUsernameContainsSpecialchar(t *testing.T) {
+	var github github.Github
 	output := github.Validate("us*er")
 	if output {
 		t.Fatalf("username beginning with special char accepted")
@@ -63,6 +71,7 @@ func TestUsernameContainsSpecialchar(t *testing.T) {
 }
 
 func TestUsernameIsValidWithDash(t *testing.T) {
+	var github github.Github
 	output := github.Validate("ile-singe")
 	if !output {
 		t.Fatalf("Valid username not accepted")

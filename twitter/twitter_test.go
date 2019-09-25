@@ -7,6 +7,7 @@ import (
 )
 
 func TestUsernameTooLong(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("0123456789012345")
 	if output {
 		t.Fatalf("Too long username accepted")
@@ -14,6 +15,7 @@ func TestUsernameTooLong(t *testing.T) {
 }
 
 func TestUsernameShortEnough(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("012345678901234")
 	if !output {
 		t.Fatalf("Valid username refused")
@@ -21,6 +23,7 @@ func TestUsernameShortEnough(t *testing.T) {
 }
 
 func TestUsernameTooShort(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("")
 	if output {
 		t.Fatalf("Too short username accepted")
@@ -28,6 +31,7 @@ func TestUsernameTooShort(t *testing.T) {
 }
 
 func TestUsernameLongEnough(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("o")
 	if !output {
 		t.Fatalf("Valid username refused")
@@ -35,6 +39,7 @@ func TestUsernameLongEnough(t *testing.T) {
 }
 
 func TestUsernameContainsUppercaseTwitter(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("TWITTERuser")
 	if output {
 		t.Fatalf("username containing uppercase twitter accepted")
@@ -42,6 +47,7 @@ func TestUsernameContainsUppercaseTwitter(t *testing.T) {
 }
 
 func TestUsernameContainsLowercaseTwitter(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("twitterUser")
 	if output {
 		t.Fatalf("username containing lowercase twitter accepted")
@@ -49,6 +55,7 @@ func TestUsernameContainsLowercaseTwitter(t *testing.T) {
 }
 
 func TestUsernameContainsSpecialchar(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("us*er")
 	if output {
 		t.Fatalf("username containing special char accepted")
@@ -56,6 +63,7 @@ func TestUsernameContainsSpecialchar(t *testing.T) {
 }
 
 func TestUsernameIsValidWithUnderscore(t *testing.T) {
+	var twitter twitter.Twitter
 	output := twitter.Validate("ile_singe")
 	if !output {
 		t.Fatalf("Valid username not accepted")
