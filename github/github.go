@@ -3,25 +3,12 @@ package github
 import (
 	"net/http"
 
+	"github.com/ilesinge/usercheck/client"
 	"github.com/ilesinge/usercheck/rules"
 )
 
 // Github type
 type Github struct{}
-
-// ErrNetworkFailure error
-type ErrNetworkFailure struct {
-	Cause error
-}
-
-func (e *ErrNetworkFailure) Error() string {
-	return "An error occured during Github username availability check"
-}
-
-// Unwrap returns the underlying error
-func (e *ErrNetworkFailure) Unwrap() error {
-	return e.Cause
-}
 
 // Validate check if is github valid
 func (g *Github) Validate(username string) bool {
@@ -29,11 +16,15 @@ func (g *Github) Validate(username string) bool {
 }
 
 // IsAvailable checks if the username is available on Github
-func (g *Github) IsAvailable(username string) (available bool, err error) {
-	res, err := http.Get("https://github.com/" + username)
+func (g *Github) IsAvailable(username string, cli client.HTTPClient) (available bool, err error) {
+	req, err := http.NewRequest("GET", "https://github.com/"+username, nil)
+	if err != nil {
+		return
+	}
+	res, err := (cli).Do(req)
 	if err != nil {
 		// Need a pointer because it's the pointer that satisfies the interface (pointer receptor)
-		err = &ErrNetworkFailure{Cause: err}
+		err = &client.ErrNetworkFailure{Cause: err}
 		return
 	}
 	defer res.Body.Close()

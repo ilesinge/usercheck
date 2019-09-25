@@ -3,25 +3,12 @@ package twitter
 import (
 	"net/http"
 
+	"github.com/ilesinge/usercheck/client"
 	"github.com/ilesinge/usercheck/rules"
 )
 
 // Twitter type
 type Twitter struct{}
-
-// ErrNetworkFailure error
-type ErrNetworkFailure struct {
-	Cause error
-}
-
-func (e *ErrNetworkFailure) Error() string {
-	return "An error occured during Twitter username availability check"
-}
-
-// Unwrap returns the underlying error
-func (e *ErrNetworkFailure) Unwrap() error {
-	return e.Cause
-}
 
 // Validate check if is twitter valid
 func (t *Twitter) Validate(username string) bool {
@@ -29,11 +16,15 @@ func (t *Twitter) Validate(username string) bool {
 }
 
 // IsAvailable checks if the username is available on Twitter
-func (t *Twitter) IsAvailable(username string) (available bool, err error) {
-	res, err := http.Get("https://twitter.com/" + username)
+func (t *Twitter) IsAvailable(username string, cli client.HTTPClient) (available bool, err error) {
+	req, err := http.NewRequest("GET", "https://twitter.com/"+username, nil)
+	if err != nil {
+		return
+	}
+	res, err := (cli).Do(req)
 	if err != nil {
 		// Need a pointer because it's the pointer that satisfies the interface (pointer receptor)
-		err = &ErrNetworkFailure{Cause: err}
+		err = &client.ErrNetworkFailure{Cause: err}
 		return
 	}
 	defer res.Body.Close()
