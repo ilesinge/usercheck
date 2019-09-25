@@ -102,6 +102,36 @@ func TestDoesEndWith(t *testing.T) {
 	}
 }
 
+func TestValidateInvalidRules(t *testing.T) {
+	localRules := []func(string) bool{
+		func(u string) bool {
+			return false
+		},
+		func(u string) bool {
+			return true
+		},
+	}
+	res := rules.ValidateRules(localRules, "any")
+	if res {
+		t.Errorf("Invalid username accepted")
+	}
+}
+
+func TestValidateValidRules(t *testing.T) {
+	localRules := []func(string) bool{
+		func(u string) bool {
+			return true
+		},
+		func(u string) bool {
+			return true
+		},
+	}
+	res := rules.ValidateRules(localRules, "any")
+	if !res {
+		t.Errorf("Valid username rejected")
+	}
+}
+
 /*
 func BenchmarkHello(b *testing.B) {
 	for i := 0; i < b.N; i++ {
