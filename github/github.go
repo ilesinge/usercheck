@@ -32,6 +32,11 @@ func (g *Github) IsAvailable(username string, cli client.HTTPClient) (available 
 	return
 }
 
+// Name gets social network name
+func (g *Github) Name() string {
+	return "Github"
+}
+
 func getRules() []func(string) bool {
 	localRules := []func(string) bool{
 		rules.IsLongEnough(1),

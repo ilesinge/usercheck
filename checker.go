@@ -6,4 +6,5 @@ import "github.com/ilesinge/usercheck/client"
 type Checker interface {
 	IsAvailable(string, client.HTTPClient) (available bool, err error)
 	Validate(string) bool
+	Name() string
 }

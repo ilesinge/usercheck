@@ -32,6 +32,11 @@ func (t *Twitter) IsAvailable(username string, cli client.HTTPClient) (available
 	return
 }
 
+// Name gets social network name
+func (t *Twitter) Name() string {
+	return "Twitter"
+}
+
 func getRules() []func(string) bool {
 	localRules := []func(string) bool{
 		rules.IsLongEnough(1),
